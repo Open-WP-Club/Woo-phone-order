@@ -1,0 +1,56 @@
+.woo-phone-order {
+  margin: 20px 0;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+}
+
+.woo-phone-order h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.woo-phone-order h4 {
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.woo-phone-order p {
+  margin-bottom: 15px;
+}
+
+#woo-phone-order-form input[type="tel"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#woo-phone-order-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+#woo-phone-order-form button:hover {
+  background-color: #555;
+}
+
+.woo-phone-order-message {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #e7e7e7;
+  display: none;
+}
+
+.woo-phone-order-message.success {
+  background-color: #dff0d8;
+  color: #3c763d;
+}
+
+.woo-phone-order-message.error {
+  background-color: #f2dede;
+  color: #a94442;
+}
