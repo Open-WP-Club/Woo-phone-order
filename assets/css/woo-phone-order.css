@@ -38,6 +38,16 @@
   background-color: #555;
 }
 
+#woo-phone-order-form[disabled] input[type="tel"],
+#woo-phone-order-form[disabled] button {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+#woo-phone-order-form[disabled] button:hover {
+  background-color: #333;
+}
+
 .woo-phone-order-message {
   margin-top: 10px;
   padding: 10px;

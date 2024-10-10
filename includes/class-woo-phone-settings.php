@@ -40,6 +40,18 @@ class Woo_Phone_Order_Settings
         'default'  => __('Just enter your phone number to place an order. We\'ll contact you to confirm the details.', 'woo-phone-order'),
       ),
       array(
+        'title'    => __('Display on Product Pages', 'woo-phone-order'),
+        'id'       => 'woo_phone_order_display_on_products',
+        'type'     => 'select',
+        'options'  => array(
+          'disabled' => __('Disabled', 'woo-phone-order'),
+          'after_summary' => __('After product summary', 'woo-phone-order'),
+          'after_add_to_cart' => __('After add to cart button', 'woo-phone-order'),
+        ),
+        'default'  => 'disabled',
+        'desc'     => __('Choose where to display the phone order form on product pages.', 'woo-phone-order'),
+      ),
+      array(
         'title'    => __('Out of Stock Behavior', 'woo-phone-order'),
         'id'       => 'woo_phone_order_out_of_stock',
         'type'     => 'select',
