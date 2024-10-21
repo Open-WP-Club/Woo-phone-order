@@ -6,7 +6,7 @@
  * Description: Fast order creation with just a phone number for WooCommerce
  * Author:      OpenWPClub.com
  * Author URI:  https://openwpclub.com/
- * Version:     1.0.0
+ * Version:     1.1.0
  * Text Domain: woo-phone-order
  * Domain Path: /languages/
  * Requires at least: 5.6
@@ -21,18 +21,8 @@ if (!class_exists('Woo_Phone_Order')) :
 
   class Woo_Phone_Order
   {
-    /**
-     * Plugin instance.
-     *
-     * @var Woo_Phone_Order
-     */
     protected static $instance = null;
 
-    /**
-     * Get plugin instance.
-     *
-     * @return Woo_Phone_Order
-     */
     public static function get_instance()
     {
       if (null === self::$instance) {
@@ -41,17 +31,11 @@ if (!class_exists('Woo_Phone_Order')) :
       return self::$instance;
     }
 
-    /**
-     * Constructor.
-     */
     private function __construct()
     {
       add_action('plugins_loaded', array($this, 'init_plugin'));
     }
 
-    /**
-     * Initialize plugin.
-     */
     public function init_plugin()
     {
       if (!class_exists('WooCommerce')) {
@@ -66,20 +50,14 @@ if (!class_exists('Woo_Phone_Order')) :
       do_action('woo_phone_order_loaded');
     }
 
-    /**
-     * Define plugin constants.
-     */
     private function define_constants()
     {
-      define('WOO_PHONE_ORDER_VERSION', '1.0.0');
+      define('WOO_PHONE_ORDER_VERSION', '1.1.0');
       define('WOO_PHONE_ORDER_FILE', __FILE__);
       define('WOO_PHONE_ORDER_PATH', plugin_dir_path(WOO_PHONE_ORDER_FILE));
       define('WOO_PHONE_ORDER_URL', plugin_dir_url(WOO_PHONE_ORDER_FILE));
     }
 
-    /**
-     * Include required files.
-     */
     private function includes()
     {
       require_once WOO_PHONE_ORDER_PATH . 'includes/class-woo-phone-order-form.php';
@@ -87,23 +65,18 @@ if (!class_exists('Woo_Phone_Order')) :
       require_once WOO_PHONE_ORDER_PATH . 'includes/class-woo-phone-order-settings.php';
     }
 
-    /**
-     * Initialize hooks.
-     */
     private function init_hooks()
     {
       add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
       add_action('plugins_loaded', array($this, 'load_textdomain'));
 
-      // Initialize components
       Woo_Phone_Order_Form::init();
       Woo_Phone_Order_Ajax::init();
       Woo_Phone_Order_Settings::init();
+
+      add_action('woocommerce_after_add_to_cart_button', array('Woo_Phone_Order_Form', 'display_form'));
     }
 
-    /**
-     * Enqueue scripts and styles.
-     */
     public function enqueue_scripts()
     {
       if (is_product()) {
@@ -116,64 +89,42 @@ if (!class_exists('Woo_Phone_Order')) :
       }
     }
 
-    /**
-     * Load plugin textdomain.
-     */
     public function load_textdomain()
     {
       load_plugin_textdomain('woo-phone-order', false, dirname(plugin_basename(WOO_PHONE_ORDER_FILE)) . '/languages/');
     }
 
-    /**
-     * WooCommerce missing notice.
-     */
     public function woocommerce_missing_notice()
     {
       echo '<div class="error"><p>' . sprintf(__('Woo Phone Order requires WooCommerce to be installed and active. You can download %s here.', 'woo-phone-order'), '<a href="https://woocommerce.com/" target="_blank">WooCommerce</a>') . '</p></div>';
     }
 
-    /**
-     * Activation hook.
-     */
     public static function activate()
     {
-      if (!current_user_can('activate_plugins')) {
-        return;
-      }
+      if (!current_user_can('activate_plugins')) return;
 
-      // Add default settings
-      add_option('woo_phone_order_title', __('Quick checkout', 'woo-phone-order'));
-      add_option('woo_phone_order_subtitle', __('No registration required', 'woo-phone-order'));
-      add_option('woo_phone_order_description', __('Just enter your phone number to place an order. We\'ll contact you to confirm the details.', 'woo-phone-order'));
-      add_option('woo_phone_order_out_of_stock', 'hide');
+      add_option('woo_phone_order_title', __('Quick Order', 'woo-phone-order'));
+      add_option('woo_phone_order_description', __('Enter your phone number for a fast order:', 'woo-phone-order'));
 
       flush_rewrite_rules();
     }
 
-    /**
-     * Deactivation hook.
-     */
     public static function deactivate()
     {
-      if (!current_user_can('activate_plugins')) {
-        return;
-      }
+      if (!current_user_can('activate_plugins')) return;
 
       flush_rewrite_rules();
     }
   }
 
-  // Installation and uninstallation hooks
   register_activation_hook(__FILE__, array('Woo_Phone_Order', 'activate'));
   register_deactivation_hook(__FILE__, array('Woo_Phone_Order', 'deactivate'));
 
-  // Initialize the plugin
   function woo_phone_order()
   {
     return Woo_Phone_Order::get_instance();
   }
 
-  // Start the plugin
   woo_phone_order();
 
 endif;

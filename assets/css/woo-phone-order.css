@@ -1,6 +1,6 @@
 .woo-phone-order {
   margin: 20px 0;
-  padding: 20px;
+  padding: 15px;
   border: 1px solid #ddd;
   background-color: #f8f8f8;
 }
@@ -10,24 +10,24 @@
   margin-bottom: 10px;
 }
 
-.woo-phone-order h4 {
-  font-size: 1em;
-  margin-bottom: 10px;
-}
-
 .woo-phone-order p {
   margin-bottom: 15px;
 }
 
+#woo-phone-order-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 #woo-phone-order-form input[type="tel"] {
-  width: 100%;
+  flex: 1;
+  min-width: 200px;
   padding: 10px;
-  margin-bottom: 10px;
 }
 
 #woo-phone-order-form button {
-  width: 100%;
-  padding: 10px;
+  padding: 10px 20px;
   background-color: #333;
   color: #fff;
   border: none;
@@ -49,6 +49,7 @@
 }
 
 .woo-phone-order-message {
+  width: 100%;
   margin-top: 10px;
   padding: 10px;
   background-color: #e7e7e7;

@@ -24,8 +24,10 @@
         },
         success: function (response) {
           if (response.success) {
-            $message.addClass("success").text(response.data).show();
+            $message.addClass("success").html(response.data.message).show();
             $form.find('input[name="phone"]').val("");
+            // Optionally, you can redirect to a thank you page
+            // window.location.href = '/thank-you/?order_id=' + response.data.order_id;
           } else {
             $message.addClass("error").text(response.data).show();
           }

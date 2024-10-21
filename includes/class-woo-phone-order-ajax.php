@@ -27,19 +27,36 @@ class Woo_Phone_Order_Ajax
 
     // Create the order
     $order = wc_create_order();
-    if (is_wp_error($order)) {
-      wp_send_json_error(__('Unable to create order', 'woo-phone-order'));
-    }
 
-    $order->add_product($product);
+    // Add the product to the order
+    $order->add_product($product, 1);
+
+    // Set billing phone
     $order->set_billing_phone($phone);
-    $order->set_status('wc-phone-order');
+
+    // Set order status to completed
+    $order->set_status('completed');
+
+    // Calculate and set totals
+    $order->calculate_totals();
+
+    // Set payment method to 'Phone Order'
+    $order->set_payment_method('phone_order');
+    $order->set_payment_method_title('Phone Order');
+
+    // Save the order
     $order->save();
 
-    $order->add_order_note(__('Order placed via Woo Phone Order', 'woo-phone-order'));
+    $order->add_order_note(__('Order placed and completed via Woo Phone Order', 'woo-phone-order'));
+
+    // Reduce stock levels
+    wc_reduce_stock_levels($order->get_id());
 
     do_action('woo_phone_order_created', $order->get_id(), $phone, $product_id);
 
-    wp_send_json_success(__('Your order has been placed. We\'ll contact you shortly to confirm the details.', 'woo-phone-order'));
+    wp_send_json_success(array(
+      'message' => __('Your order has been placed and completed. We\'ll contact you shortly on the provided number.', 'woo-phone-order'),
+      'order_id' => $order->get_id()
+    ));
   }
 }
