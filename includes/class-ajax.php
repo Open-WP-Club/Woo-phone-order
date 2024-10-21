@@ -16,6 +16,8 @@ class Woo_Phone_Order_Ajax
     $phone = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
     $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
 
+    error_log('Woo Phone Order - Received request: ' . print_r($_POST, true));
+
     if (empty($phone) || strlen($phone) < 5 || strlen($phone) > 20 || !preg_match('/^[0-9+\s()-]{5,20}$/', $phone)) {
       wp_send_json_error(__('Invalid phone number', 'woo-phone-order'));
     }
@@ -25,38 +27,47 @@ class Woo_Phone_Order_Ajax
       wp_send_json_error(__('Invalid product', 'woo-phone-order'));
     }
 
-    // Create the order
-    $order = wc_create_order();
+    error_log('Woo Phone Order - Creating order for product: ' . $product_id);
 
-    // Add the product to the order
-    $order->add_product($product, 1);
+    try {
+      // Create the order
+      $order = wc_create_order();
 
-    // Set billing phone
-    $order->set_billing_phone($phone);
+      // Add the product to the order
+      $order->add_product($product, 1);
 
-    // Set order status to completed
-    $order->set_status('completed');
+      // Set billing phone
+      $order->set_billing_phone($phone);
 
-    // Calculate and set totals
-    $order->calculate_totals();
+      // Set order status to completed
+      $order->set_status('completed');
 
-    // Set payment method to 'Phone Order'
-    $order->set_payment_method('phone_order');
-    $order->set_payment_method_title('Phone Order');
+      // Calculate and set totals
+      $order->calculate_totals();
 
-    // Save the order
-    $order->save();
+      // Set payment method to 'Phone Order'
+      $order->set_payment_method('phone_order');
+      $order->set_payment_method_title('Phone Order');
 
-    $order->add_order_note(__('Order placed and completed via Woo Phone Order', 'woo-phone-order'));
+      // Save the order
+      $order->save();
 
-    // Reduce stock levels
-    wc_reduce_stock_levels($order->get_id());
+      $order->add_order_note(__('Order placed and completed via Woo Phone Order', 'woo-phone-order'));
 
-    do_action('woo_phone_order_created', $order->get_id(), $phone, $product_id);
+      // Reduce stock levels
+      wc_reduce_stock_levels($order->get_id());
 
-    wp_send_json_success(array(
-      'message' => __('Your order has been placed and completed. We\'ll contact you shortly on the provided number.', 'woo-phone-order'),
-      'order_id' => $order->get_id()
-    ));
+      error_log('Woo Phone Order - Order created successfully: ' . $order->get_id());
+
+      do_action('woo_phone_order_created', $order->get_id(), $phone, $product_id);
+
+      wp_send_json_success(array(
+        'message' => __('Your order has been placed and completed. We\'ll contact you shortly on the provided number.', 'woo-phone-order'),
+        'order_id' => $order->get_id()
+      ));
+    } catch (Exception $e) {
+      error_log('Woo Phone Order - Error creating order: ' . $e->getMessage());
+      wp_send_json_error(__('An error occurred while processing your order. Please try again.', 'woo-phone-order'));
+    }
   }
 }

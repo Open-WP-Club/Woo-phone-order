@@ -5,7 +5,7 @@
  * Description: Fast order creation with just a phone number for WooCommerce
  * Author:      OpenWPClub.com
  * Author URI:  https://openwpclub.com/
- * Version:     1.1.0
+ * Version:     1.0.0
  * Text Domain: woo-phone-order
  * Domain Path: /languages/
  * Requires at least: 5.6
@@ -51,7 +51,7 @@ if (!class_exists('Woo_Phone_Order')) :
 
     private function define_constants()
     {
-      define('WOO_PHONE_ORDER_VERSION', '1.1.0');
+      define('WOO_PHONE_ORDER_VERSION', '1.0.0');
       define('WOO_PHONE_ORDER_FILE', __FILE__);
       define('WOO_PHONE_ORDER_PATH', plugin_dir_path(WOO_PHONE_ORDER_FILE));
       define('WOO_PHONE_ORDER_URL', plugin_dir_url(WOO_PHONE_ORDER_FILE));

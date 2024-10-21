@@ -13,6 +13,8 @@
       $form.find("button").prop("disabled", true);
       $message.removeClass("success error").hide();
 
+      console.log("Submitting phone order for product: " + productId);
+
       $.ajax({
         url: woo_phone_order_params.ajax_url,
         type: "POST",
@@ -23,16 +25,16 @@
           product_id: productId,
         },
         success: function (response) {
+          console.log("Received response:", response);
           if (response.success) {
             $message.addClass("success").html(response.data.message).show();
             $form.find('input[name="phone"]').val("");
-            // Optionally, you can redirect to a thank you page
-            // window.location.href = '/thank-you/?order_id=' + response.data.order_id;
           } else {
             $message.addClass("error").text(response.data).show();
           }
         },
-        error: function () {
+        error: function (jqXHR, textStatus, errorThrown) {
+          console.error("Ajax error:", textStatus, errorThrown);
           $message
             .addClass("error")
             .text("An error occurred. Please try again.")
@@ -42,6 +44,13 @@
           $form.find("button").prop("disabled", false);
         },
       });
+    });
+
+    // Prevent the default Add to Cart behavior
+    $("form.cart").on("submit", function (e) {
+      if ($(this).hasClass("woo-phone-order-form")) {
+        e.preventDefault();
+      }
     });
   });
 })(jQuery);
