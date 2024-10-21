@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Woo Phone Order
- * Plugin URI:  https://openwpclub.com/plugins/woo-phone-order/
+ * Plugin Name: WooCommerce Phone Order
  * Description: Fast order creation with just a phone number for WooCommerce
  * Author:      OpenWPClub.com
  * Author URI:  https://openwpclub.com/
@@ -60,9 +59,9 @@ if (!class_exists('Woo_Phone_Order')) :
 
     private function includes()
     {
-      require_once WOO_PHONE_ORDER_PATH . 'includes/class-woo-phone-order-form.php';
-      require_once WOO_PHONE_ORDER_PATH . 'includes/class-woo-phone-order-ajax.php';
-      require_once WOO_PHONE_ORDER_PATH . 'includes/class-woo-phone-order-settings.php';
+      require_once WOO_PHONE_ORDER_PATH . 'includes/class-form.php';
+      require_once WOO_PHONE_ORDER_PATH . 'includes/class-ajax.php';
+      require_once WOO_PHONE_ORDER_PATH . 'includes/class-settings.php';
     }
 
     private function init_hooks()
