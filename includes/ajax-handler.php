@@ -65,6 +65,7 @@ class WC_Phone_Order_Ajax
         'order_id' => $order->get_id()
       ));
     } catch (Exception $e) {
+      error_log('WooCommerce Phone Order Error: ' . $e->getMessage());
       wp_send_json_error(__('An error occurred while processing your order. Please try again.', 'woocommerce-phone-order'));
     }
   }
@@ -104,16 +105,21 @@ class WC_Phone_Order_Ajax
       $email = 'guest_' . preg_replace('/[^0-9]/', '', $phone) . '_' . wp_generate_password(5, false) . '@phone-order.local';
     }
 
-    // Create customer
-    $customer = new WC_Customer();
-    $customer->set_username($username);
-    $customer->set_email($email);
-    $customer->set_billing_phone($phone);
-    $customer->set_role('customer');
+    // Create WordPress user first
+    $user_id = wp_create_user($username, wp_generate_password(), $email);
 
-    $customer_id = $customer->save();
+    if (is_wp_error($user_id)) {
+      return 0;
+    }
 
-    return $customer_id;
+    // Set user role
+    $user = new WP_User($user_id);
+    $user->set_role('customer');
+
+    // Update WooCommerce customer meta
+    update_user_meta($user_id, 'billing_phone', $phone);
+
+    return $user_id;
   }
 
   private static function validate_phone($phone)

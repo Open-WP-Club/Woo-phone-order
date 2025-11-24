@@ -136,6 +136,7 @@ class WC_Phone_Order_Form
             type="tel"
             name="phone"
             class="woo-phone-order__phone-input"
+            autocomplete="tel"
             required
             placeholder="<?php esc_attr_e('Your phone number', 'woocommerce-phone-order'); ?>"
             <?php echo $form_disabled ? 'disabled' : ''; ?>>
