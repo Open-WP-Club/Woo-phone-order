@@ -1,0 +1,28 @@
+# Version Requirements Configuration
+#
+# Place this file in the Open-WP-Club/.github repository as: version-requirements.yml
+# This centralized file is automatically used by all Open-WP-Club plugins
+#
+# This file defines the minimum and tested versions for WordPress, PHP, and WooCommerce
+
+wordpress:
+  # Minimum WordPress version required
+  requires_at_least: "6.0"
+  # Latest WordPress version tested with
+  tested_up_to: "6.8"
+
+php:
+  # Minimum PHP version required
+  requires: "7.4"
+
+woocommerce:
+  # Minimum WooCommerce version required (for WooCommerce plugins only)
+  requires_at_least: "8.0"
+  # Latest WooCommerce version tested with (for WooCommerce plugins only)
+  tested_up_to: "9.5"
+
+# Notes:
+# - The workflow will automatically detect if your plugin is a WooCommerce plugin
+#   by searching for WooCommerce-related keywords in your readme.txt and main plugin file
+# - If WooCommerce keywords are found, WC requirements will be added/updated
+# - If no WooCommerce keywords are found, only WordPress and PHP requirements are updated
