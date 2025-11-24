@@ -10,7 +10,7 @@ class WC_Phone_Order_Settings
 
   public static function add_settings_page($settings)
   {
-    $settings[] = include WC_PHONE_ORDER_PATH . 'includes/class-settings-page.php';
+    $settings[] = include WC_PHONE_ORDER_PATH . 'includes/settings-page.php';
     return $settings;
   }
 

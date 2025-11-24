@@ -65,9 +65,9 @@ if (!class_exists('WooCommerce_Phone_Order')) :
 
     private function includes()
     {
-      require_once WC_PHONE_ORDER_PATH . 'includes/class-settings.php';
-      require_once WC_PHONE_ORDER_PATH . 'includes/class-form.php';
-      require_once WC_PHONE_ORDER_PATH . 'includes/class-ajax.php';
+      require_once WC_PHONE_ORDER_PATH . 'includes/settings.php';
+      require_once WC_PHONE_ORDER_PATH . 'includes/form-renderer.php';
+      require_once WC_PHONE_ORDER_PATH . 'includes/ajax-handler.php';
     }
 
     private function init_hooks()
