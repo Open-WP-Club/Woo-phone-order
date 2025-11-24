@@ -27,8 +27,22 @@ class WC_Phone_Order_Ajax
       return;
     }
 
+    // Check if product is in stock
+    if (!$product->is_in_stock()) {
+      wp_send_json_error(__('This product is currently out of stock', 'woocommerce-phone-order'));
+      return;
+    }
+
     try {
-      $order = wc_create_order();
+      // Try to find existing customer by phone number
+      $customer_id = self::find_customer_by_phone($phone);
+
+      // If no customer found, create guest account
+      if (!$customer_id) {
+        $customer_id = self::create_guest_customer($phone);
+      }
+
+      $order = wc_create_order(array('customer_id' => $customer_id));
 
       $order->add_product($product, 1);
       $order->set_billing_phone($phone);
@@ -40,7 +54,9 @@ class WC_Phone_Order_Ajax
 
       $order->add_order_note(__('Order placed via WooCommerce Phone Order', 'woocommerce-phone-order'));
 
-      wc_reduce_stock_levels($order->get_id());
+      // Use modern method - WooCommerce handles stock reduction automatically on order status change
+      // But we can explicitly trigger it if needed
+      wc_maybe_reduce_stock_levels($order->get_id());
 
       do_action('wc_phone_order_created', $order->get_id(), $phone, $product_id);
 
@@ -51,6 +67,53 @@ class WC_Phone_Order_Ajax
     } catch (Exception $e) {
       wp_send_json_error(__('An error occurred while processing your order. Please try again.', 'woocommerce-phone-order'));
     }
+  }
+
+  /**
+   * Find customer by phone number
+   */
+  private static function find_customer_by_phone($phone)
+  {
+    global $wpdb;
+
+    // Search in user meta for billing phone
+    $user_id = $wpdb->get_var($wpdb->prepare(
+      "SELECT user_id FROM {$wpdb->usermeta}
+       WHERE meta_key = 'billing_phone'
+       AND meta_value = %s
+       LIMIT 1",
+      $phone
+    ));
+
+    return $user_id ? absint($user_id) : 0;
+  }
+
+  /**
+   * Create guest customer account
+   */
+  private static function create_guest_customer($phone)
+  {
+    // Generate unique username from phone
+    $username = 'guest_' . preg_replace('/[^0-9]/', '', $phone) . '_' . time();
+
+    // Generate email from phone (required for WooCommerce customer)
+    $email = 'guest_' . preg_replace('/[^0-9]/', '', $phone) . '@phone-order.local';
+
+    // Check if email exists, if so append random string
+    if (email_exists($email)) {
+      $email = 'guest_' . preg_replace('/[^0-9]/', '', $phone) . '_' . wp_generate_password(5, false) . '@phone-order.local';
+    }
+
+    // Create customer
+    $customer = new WC_Customer();
+    $customer->set_username($username);
+    $customer->set_email($email);
+    $customer->set_billing_phone($phone);
+    $customer->set_role('customer');
+
+    $customer_id = $customer->save();
+
+    return $customer_id;
   }
 
   private static function validate_phone($phone)
