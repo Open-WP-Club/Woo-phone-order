@@ -1,86 +1,154 @@
-# Woo Phone Order
+# Phone Order for WooCommerce
 
-Woo Phone Order is a WooCommerce extension that allows customers to place quick orders using just their phone number. This plugin is perfect for businesses looking to streamline their ordering process and reduce friction in the customer journey.
+Quick order creation with just a phone number for WooCommerce stores. This plugin enables customers to place orders instantly by entering their phone number on product pages.
 
 ## Features
 
-- Easy order placement with just a phone number
-- Customizable form placement on product pages
-- Shortcode support for flexible form placement
-- Configurable text for form title, subtitle, and description
-- Out-of-stock product handling options
-- AJAX-powered form submission for a smooth user experience
-- Custom "Phone Order" status for easy order management
-- Responsive design that works on all devices
+- **Quick Orders** - Customers order with just a phone number
+- **Smart Customer Matching** - Automatically matches existing customers by phone
+- **Guest Customer Support** - Creates guest accounts for new phone numbers
+- **Flexible Display** - Show form after product summary, after add-to-cart, or use shortcode
+- **Stock Management** - Respects product stock status with configurable behavior
+- **Full Customization** - Configure all form text via settings page
+- **HPOS Compatible** - Works with WooCommerce High Performance Order Storage
+- **Modern UI** - Responsive design with loading states and visual feedback
+- **Developer Friendly** - Hooks, filters, and clean code structure
+
+## Requirements
+
+- WordPress 6.0 or higher
+- WooCommerce 8.0 or higher
+- PHP 7.4 or higher
 
 ## Installation
 
-1. Upload the `woo-phone-order` folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Ensure that WooCommerce is installed and activated
+1. Upload the plugin folder to `/wp-content/plugins/`
+2. Activate through the 'Plugins' menu in WordPress
+3. Ensure WooCommerce is installed and activated
+4. Configure settings at WooCommerce > Settings > Phone Order
 
 ## Configuration
 
-1. Go to WooCommerce > Settings > Products > Woo Phone Order Settings
-2. Configure the following options:
-   - Form Title
-   - Form Subtitle
-   - Form Description
-   - Display on Product Pages (Disabled, After product summary, or After add to cart button)
-   - Out of Stock Behavior (Hide form, Show form, or Show disabled form)
-3. Save your changes
+Navigate to **WooCommerce > Settings > Phone Order** to configure:
+
+### Form Content
+- **Form Title** - Main heading (default: "Quick Purchase")
+- **Form Subtitle** - Tagline/subtitle
+- **Form Description** - Explanatory text
+- **Button Text** - Submit button label (default: "Order Now")
+
+### Display Options
+- **After product summary** - Shows below product details
+- **After add to cart button** - Shows near purchase button
+- **Disabled** - Use shortcode only
+
+### Stock Behavior
+- **Hide form** - Don't show for out-of-stock products
+- **Show form** - Display but reject orders
+- **Show disabled** - Display with disabled state and notice
 
 ## Usage
 
-### Automatic Display on Product Pages
+### Automatic Display
 
-If you've configured the "Display on Product Pages" setting, the phone order form will automatically appear on your product pages in the selected location.
+Configure display position in settings. Form appears automatically on product pages.
 
 ### Shortcode
 
-You can use the `[woo_phone_order]` shortcode to display the form anywhere on your site. You can also specify a product ID:
+```
+[woo_phone_order]
+```
 
+With specific product:
 ```
 [woo_phone_order product_id="123"]
 ```
 
-If no product ID is specified, it will use the current product ID (on product pages) or the latest product.
+If no product ID specified, uses current product or latest product.
 
-## Customization
+## How It Works
 
-### CSS
+1. Customer enters phone number on product page
+2. Plugin checks for existing customer with that phone
+3. Creates guest account if customer is new
+4. Creates WooCommerce order with "Processing" status
+5. Store owner contacts customer to complete order
 
-The plugin includes basic styling to make the form look good out of the box. If you want to customize the appearance, you can add your own CSS rules to your theme's stylesheet.
+Orders use WooCommerce's standard `billing_phone` field for compatibility.
 
-### Hooks and Filters
+## Developer Hooks
 
-Developers can use the following hooks to extend the plugin's functionality:
+### Actions
 
-- `woo_phone_order_created` action: Fired when a new phone order is created. Parameters: `$order_id`, `$phone`, `$product_id`
+**`wc_phone_order_created`**
+Fires when order is created via phone order.
+
+```php
+do_action('wc_phone_order_created', $order_id, $phone, $product_id);
+```
+
+### Filters
+
+**`wc_phone_order_settings`**
+Modify settings page fields.
+
+```php
+add_filter('wc_phone_order_settings', function($settings) {
+    // Modify $settings array
+    return $settings;
+});
+```
 
 ## Frequently Asked Questions
 
-**Q: Can customers order multiple products or specify quantities?**
-A: Currently, the plugin is designed for quick, single-product orders. For more complex orders, customers should use the regular WooCommerce checkout process.
+**Can customers order multiple products?**
+No, this is designed for quick single-product orders. Customers should use regular checkout for complex orders.
 
-**Q: How are phone orders managed?**
-A: Phone orders are created with a custom "Phone Order" status. You can manage these orders from the WooCommerce Orders page in your WordPress admin.
+**How are orders managed?**
+Orders appear in WooCommerce Orders with "Processing" status. Filter by payment method "Phone Order".
 
-**Q: Is this plugin compatible with my theme?**
-A: The plugin should work with any WooCommerce-compatible theme. If you encounter any styling issues, you may need to add some custom CSS to your theme.
+**Does it work with HPOS?**
+Yes! Fully compatible with WooCommerce High Performance Order Storage (Custom Order Tables).
+
+**Can I style the form?**
+Yes! Add custom CSS targeting `.woo-phone-order` classes. Uses BEM methodology for easy customization.
+
+**What happens to customer data?**
+Uses WooCommerce standard fields. Existing customers are matched by phone. New customers get guest accounts.
 
 ## Support
 
-If you encounter any issues or have questions about the plugin, please open an issue on our GitHub repository or contact us through our website.
+For issues or questions:
+- Open an issue on [GitHub](https://github.com/Open-WP-Club/Woo-phone-order)
+- Visit [OpenWPClub.com](https://openwpclub.com)
 
 ## Contributing
 
-We welcome contributions to improve Woo Phone Order. Please fork the repository and submit a pull request with your changes.
+Contributions welcome! Fork the repository and submit pull requests.
+
+## Changelog
+
+### 1.1.0
+- Added HPOS compatibility
+- Added full settings page
+- Added shortcode support
+- Added customer matching by phone
+- Added guest customer creation
+- Added stock validation
+- Added configurable form placement
+- Added out-of-stock behavior options
+- Improved CSS with BEM methodology
+- Improved JavaScript error handling
+- Fixed deprecated functions
+- Updated compatibility for WooCommerce 9.x
+
+### 1.0.0
+- Initial release
 
 ## License
 
-Woo Phone Order is released under the GPL v2 or later license.
+GPL v2 or later
 
 ## Credits
 
-Woo Phone Order is developed and maintained by OpenWPClub.com.
+Developed and maintained by [OpenWPClub.com](https://openwpclub.com)
