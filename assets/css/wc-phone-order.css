@@ -1,67 +1,171 @@
+/* WooCommerce Phone Order - Main Styles */
+
 .woo-phone-order {
   margin: 20px 0;
-  padding: 15px;
-  border: 1px solid #ddd;
-  background-color: #f8f8f8;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  border-radius: 4px;
 }
 
-.woo-phone-order h3 {
-  font-size: 1.2em;
-  margin-bottom: 10px;
+.woo-phone-order__title {
+  font-size: 1.3em;
+  margin: 0 0 10px 0;
+  color: #333;
+  font-weight: 600;
 }
 
-.woo-phone-order p {
-  margin-bottom: 15px;
+.woo-phone-order__subtitle {
+  font-size: 1em;
+  margin: 0 0 5px 0;
+  color: #666;
+  font-weight: 500;
 }
 
-#woo-phone-order-form {
+.woo-phone-order__description {
+  font-size: 0.95em;
+  margin: 0 0 15px 0;
+  color: #777;
+  line-height: 1.5;
+}
+
+.woo-phone-order__form {
+  display: block;
+}
+
+.woo-phone-order__input-group {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  align-items: center;
 }
 
-#woo-phone-order-form input[type="tel"] {
-  flex: 1;
+.woo-phone-order__phone-input {
+  flex: 1 1 200px;
   min-width: 200px;
-  padding: 10px;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
 }
 
-#woo-phone-order-form button {
-  padding: 10px 20px;
+.woo-phone-order__phone-input:focus {
+  outline: none;
+  border-color: #555;
+}
+
+.woo-phone-order__submit-button {
+  padding: 12px 24px;
   background-color: #333;
   color: #fff;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 1em;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  flex: 0 0 auto;
 }
 
-#woo-phone-order-form button:hover {
+.woo-phone-order__submit-button:hover:not(:disabled) {
   background-color: #555;
 }
 
-#woo-phone-order-form[disabled] input[type="tel"],
-#woo-phone-order-form[disabled] button {
+.woo-phone-order__submit-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-#woo-phone-order-form[disabled] button:hover {
-  background-color: #333;
-}
-
-.woo-phone-order-message {
-  width: 100%;
-  margin-top: 10px;
+.woo-phone-order__out-of-stock-notice {
+  margin: 10px 0 0 0;
   padding: 10px;
-  background-color: #e7e7e7;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 4px;
+  color: #856404;
+  font-size: 0.9em;
+}
+
+.woo-phone-order__message {
+  margin-top: 15px;
+  padding: 12px 15px;
+  border-radius: 4px;
   display: none;
+  font-size: 0.95em;
 }
 
-.woo-phone-order-message.success {
-  background-color: #dff0d8;
-  color: #3c763d;
+.woo-phone-order__message.woo-phone-order__message--visible {
+  display: block;
 }
 
-.woo-phone-order-message.error {
-  background-color: #f2dede;
-  color: #a94442;
+.woo-phone-order__message.woo-phone-order__message--success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.woo-phone-order__message.woo-phone-order__message--error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.woo-phone-order__message.woo-phone-order__message--info {
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
+  color: #0c5460;
+}
+
+/* Disabled state */
+.woo-phone-order--disabled {
+  opacity: 0.8;
+}
+
+.woo-phone-order--disabled .woo-phone-order__phone-input,
+.woo-phone-order--disabled .woo-phone-order__submit-button {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Loading state */
+.woo-phone-order__form--loading .woo-phone-order__submit-button {
+  position: relative;
+  color: transparent;
+}
+
+.woo-phone-order__form--loading .woo-phone-order__submit-button::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: woo-phone-order-spin 0.6s linear infinite;
+}
+
+@keyframes woo-phone-order-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .woo-phone-order__input-group {
+    flex-direction: column;
+  }
+
+  .woo-phone-order__phone-input {
+    width: 100%;
+  }
+
+  .woo-phone-order__submit-button {
+    width: 100%;
+  }
 }
