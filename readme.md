@@ -11,8 +11,6 @@ Quick order creation with just a phone number for WooCommerce stores. This plugi
 - **Stock Management** - Respects product stock status with configurable behavior
 - **Full Customization** - Configure all form text via settings page
 - **HPOS Compatible** - Works with WooCommerce High Performance Order Storage
-- **Modern UI** - Responsive design with loading states and visual feedback
-- **Developer Friendly** - Hooks, filters, and clean code structure
 
 ## Requirements
 
@@ -115,35 +113,6 @@ Yes! Add custom CSS targeting `.woo-phone-order` classes. Uses BEM methodology f
 
 **What happens to customer data?**
 Uses WooCommerce standard fields. Existing customers are matched by phone. New customers get guest accounts.
-
-## Support
-
-For issues or questions:
-- Open an issue on [GitHub](https://github.com/Open-WP-Club/Woo-phone-order)
-- Visit [OpenWPClub.com](https://openwpclub.com)
-
-## Contributing
-
-Contributions welcome! Fork the repository and submit pull requests.
-
-## Changelog
-
-### 1.1.0
-- Added HPOS compatibility
-- Added full settings page
-- Added shortcode support
-- Added customer matching by phone
-- Added guest customer creation
-- Added stock validation
-- Added configurable form placement
-- Added out-of-stock behavior options
-- Improved CSS with BEM methodology
-- Improved JavaScript error handling
-- Fixed deprecated functions
-- Updated compatibility for WooCommerce 9.x
-
-### 1.0.0
-- Initial release
 
 ## License
 
