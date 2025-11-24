@@ -35,7 +35,7 @@
         url: woo_phone_order_params.ajax_url,
         type: "POST",
         data: {
-          action: "woo_phone_order_submit",
+          action: "wc_phone_order_submit",
           nonce: woo_phone_order_params.nonce,
           phone: phone,
           product_id: productId,
