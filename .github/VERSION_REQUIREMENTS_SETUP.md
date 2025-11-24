@@ -18,11 +18,9 @@ The `update-version-requirements.yml` workflow automatically updates version req
 
 ## Setup Instructions
 
-### Step 1: Create Your Configuration Repository
+### Step 1: Create Configuration File
 
-1. Create or choose a repository to store your version configuration
-2. Create a file named `version-requirements.yml` in the root (or any path you prefer)
-3. Use this template:
+In the centralized repository `Open-WP-Club/.github`, create a file named `version-requirements.yml` in the root:
 
 ```yaml
 wordpress:
@@ -37,15 +35,9 @@ woocommerce:
   tested_up_to: "9.5"
 ```
 
-### Step 2: Configure Repository Variables
+The workflow automatically reads from this centralized location - no configuration needed!
 
-1. Go to your plugin repository's **Settings** → **Secrets and variables** → **Actions** → **Variables**
-2. Click **New repository variable**
-3. Add:
-   - **Name**: `VERSION_CONFIG_REPO`
-   - **Value**: `your-username/your-config-repo` (e.g., `Open-WP-Club/plugin-configs`)
-
-### Step 3: Verify Permissions
+### Step 2: Verify Workflow Permissions
 
 Ensure the `GITHUB_TOKEN` has the following permissions in your repository settings:
 - **Contents**: Read and write
@@ -55,15 +47,13 @@ Go to **Settings** → **Actions** → **General** → **Workflow permissions** 
 - ✅ Read and write permissions
 - ✅ Allow GitHub Actions to create and approve pull requests
 
-### Step 4: Test the Workflow
+### Step 3: Test the Workflow
 
 1. Go to **Actions** tab in your repository
 2. Select **Update Version Requirements** workflow
 3. Click **Run workflow**
-4. Choose:
-   - Leave `config_repo` empty (uses repository variable)
-   - Leave `config_path` empty (uses default `version-requirements.yml`)
-   - Or provide custom values to override
+4. Optionally provide:
+   - `config_path`: Custom path if not using the default `version-requirements.yml`
 
 ## How It Works
 
@@ -115,8 +105,7 @@ You can also trigger it manually anytime.
 2. Select **Update Version Requirements**
 3. Click **Run workflow**
 4. Optionally provide:
-   - `config_repo`: Override the default config repository
-   - `config_path`: Override the default config file path
+   - `config_path`: Override the default config file path (default: `version-requirements.yml`)
 
 ### Using GitHub CLI
 
@@ -124,10 +113,9 @@ You can also trigger it manually anytime.
 gh workflow run update-version-requirements.yml
 ```
 
-With custom configuration:
+With custom config path:
 ```bash
 gh workflow run update-version-requirements.yml \
-  -f config_repo="owner/repo" \
   -f config_path="path/to/config.yml"
 ```
 
@@ -150,20 +138,17 @@ schedule:
 
 If your config file is not in the root or has a different name:
 
-**Option 1**: Update repository variable `VERSION_CONFIG_PATH`
-**Option 2**: Provide `config_path` input when triggering manually
-**Option 3**: Edit the workflow default value
+**Option 1**: Provide `config_path` input when triggering manually
+**Option 2**: Edit the workflow default value (line 13)
 
 ### Multiple Configuration Files
 
-If you have different version requirements for different plugins:
+If you have different version requirements for different plugin groups:
 
-1. Create multiple config files:
+1. Create multiple config files in `Open-WP-Club/.github`:
    - `version-requirements-legacy.yml`
    - `version-requirements-modern.yml`
-2. Trigger manually with the appropriate `config_path`
-
-Or set up different repository variables per plugin.
+2. Trigger manually with the appropriate `config_path` for each plugin type
 
 ## Troubleshooting
 
@@ -174,9 +159,9 @@ The workflow compares versions with your current files. If versions match, no PR
 ### Authentication errors
 
 Ensure:
-- Repository variable `VERSION_CONFIG_REPO` is set correctly
-- Config repository is accessible (public or `GITHUB_TOKEN` has access)
-- Workflow permissions are configured correctly
+- The `Open-WP-Club/.github` repository is accessible
+- Config file `version-requirements.yml` exists in the repo
+- Workflow permissions are configured correctly (see Step 2 above)
 
 ### Push failures
 

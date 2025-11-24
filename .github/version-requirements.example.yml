@@ -1,5 +1,8 @@
 # Version Requirements Configuration
-# Place this file in your centralized configuration repository
+#
+# Place this file in the Open-WP-Club/.github repository as: version-requirements.yml
+# This centralized file is automatically used by all Open-WP-Club plugins
+#
 # This file defines the minimum and tested versions for WordPress, PHP, and WooCommerce
 
 wordpress:

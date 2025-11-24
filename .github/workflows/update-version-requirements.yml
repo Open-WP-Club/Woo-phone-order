@@ -8,12 +8,8 @@ on:
   # Allow manual triggering
   workflow_dispatch:
     inputs:
-      config_repo:
-        description: 'Config repository (owner/repo)'
-        required: false
-        default: ''
       config_path:
-        description: 'Path to config file in repo'
+        description: 'Path to config file in repo (optional override)'
         required: false
         default: 'version-requirements.yml'
 
@@ -32,16 +28,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Get configuration repository
+      - name: Get configuration
         id: get-config
         run: |
-          # Use input if provided, otherwise use repository variable
-          CONFIG_REPO="${{ github.event.inputs.config_repo }}"
+          # Centralized config repository for all Open-WP-Club plugins
+          CONFIG_REPO="Open-WP-Club/.github"
           CONFIG_PATH="${{ github.event.inputs.config_path }}"
-
-          if [ -z "$CONFIG_REPO" ]; then
-            CONFIG_REPO="${{ vars.VERSION_CONFIG_REPO }}"
-          fi
 
           if [ -z "$CONFIG_PATH" ]; then
             CONFIG_PATH="version-requirements.yml"
@@ -50,10 +42,7 @@ jobs:
           echo "config_repo=$CONFIG_REPO" >> $GITHUB_OUTPUT
           echo "config_path=$CONFIG_PATH" >> $GITHUB_OUTPUT
 
-          if [ -z "$CONFIG_REPO" ]; then
-            echo "ERROR: No config repository specified. Set VERSION_CONFIG_REPO variable or provide config_repo input."
-            exit 1
-          fi
+          echo "Using configuration from: $CONFIG_REPO/$CONFIG_PATH"
 
       - name: Download version configuration
         run: |
