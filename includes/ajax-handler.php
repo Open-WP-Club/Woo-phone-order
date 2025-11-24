@@ -13,7 +13,7 @@ class WC_Phone_Order_Ajax
   {
     check_ajax_referer('wc-phone-order-nonce', 'nonce');
 
-    $phone = isset($_POST['phone']) ? sanitize_text_field($_POST['phone']) : '';
+    $phone = isset($_POST['phone']) ? sanitize_text_field(wp_unslash($_POST['phone'])) : '';
     $product_id = isset($_POST['product_id']) ? absint($_POST['product_id']) : 0;
 
     if (empty($phone) || !self::validate_phone($phone)) {
@@ -65,7 +65,9 @@ class WC_Phone_Order_Ajax
         'order_id' => $order->get_id()
       ));
     } catch (Exception $e) {
-      error_log('WooCommerce Phone Order Error: ' . $e->getMessage());
+      if (defined('WP_DEBUG') && WP_DEBUG) {
+        error_log('WooCommerce Phone Order Error: ' . $e->getMessage());
+      }
       wp_send_json_error(__('An error occurred while processing your order. Please try again.', 'woocommerce-phone-order'));
     }
   }
@@ -75,16 +77,23 @@ class WC_Phone_Order_Ajax
    */
   private static function find_customer_by_phone($phone)
   {
-    global $wpdb;
+    $cache_key = 'wc_phone_order_customer_' . md5($phone);
+    $user_id = wp_cache_get($cache_key, 'wc_phone_order');
 
-    // Search in user meta for billing phone
-    $user_id = $wpdb->get_var($wpdb->prepare(
-      "SELECT user_id FROM {$wpdb->usermeta}
-       WHERE meta_key = 'billing_phone'
-       AND meta_value = %s
-       LIMIT 1",
-      $phone
-    ));
+    if (false === $user_id) {
+      global $wpdb;
+
+      // Search in user meta for billing phone
+      $user_id = $wpdb->get_var($wpdb->prepare(
+        "SELECT user_id FROM {$wpdb->usermeta}
+         WHERE meta_key = 'billing_phone'
+         AND meta_value = %s
+         LIMIT 1",
+        $phone
+      ));
+
+      wp_cache_set($cache_key, $user_id ? absint($user_id) : 0, 'wc_phone_order', 3600);
+    }
 
     return $user_id ? absint($user_id) : 0;
   }

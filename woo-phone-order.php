@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Plugin Name: WooCommerce Phone Order
- * Plugin URI:  https://openwpclub.com/plugins/woocommerce-phone-order/
+ * Plugin Name: Phone Order for WooCommerce
+ * Plugin URI:  https://openwpclub.com/plugins/phone-order-for-woocommerce/
  * Description: Fast order creation with just a phone number for WooCommerce
  * Author:      OpenWPClub.com
  * Author URI:  https://openwpclub.com/
@@ -112,11 +112,11 @@ if (!class_exists('WooCommerce_Phone_Order')) :
     }
   }
 
-  function woocommerce_phone_order()
+  function wc_phone_order_init()
   {
     return WooCommerce_Phone_Order::get_instance();
   }
 
-  woocommerce_phone_order();
+  wc_phone_order_init();
 
 endif;
